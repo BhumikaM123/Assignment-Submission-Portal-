@@ -1,3 +1,84 @@
+
+### **Assignment Submission Portal Documentation**
+
+---
+
+### **Objective:**
+The assignment submission portal enables users to upload assignments and allows admins to manage the submitted tasks by accepting or rejecting them.
+
+---
+
+### **User Types:**
+
+1. **Users**:
+   - **Register/Login**: Users can register with a unique `userId` and password. Upon successful login, they receive a token for authentication.
+   - **Upload Assignments**: Users can upload assignments to be reviewed by specific admins. The assignment includes the task description and the admin’s identifier.
+
+2. **Admins**:
+   - **Register/Login**: Admins can register and log in with their credentials, similar to users. They also receive a token for authenticated actions.
+   - **View Assignments**: Admins can view assignments that are tagged to them.
+   - **Accept/Reject Assignments**: Admins can either accept or reject an assignment based on their review.
+
+---
+
+### **Functionality Overview:**
+
+1. **Authentication**:
+   - Both users and admins authenticate using **JWT tokens**.
+   - The token is included in the `Authorization` header when making requests to protected routes.
+
+2. **Database**:
+   - MongoDB is used to store user and admin data, as well as the assignments submitted.
+   - Each assignment includes:
+     - `userId`: The ID of the user who submitted the assignment.
+     - `task`: The task content or description.
+     - `admin`: The admin reviewing the task.
+     - `status`: Status of the assignment (e.g., pending, accepted, rejected).
+     - `timestamp`: The time the assignment was submitted.
+
+3. **Role-Based Actions**:
+   - **Users**:
+     - Can register, log in, and upload assignments tagged to an admin.
+   - **Admins**:
+     - Can view all assignments assigned to them.
+     - Can accept or reject assignments.
+     - The decision is recorded in the database with a timestamp for tracking.
+
+---
+
+### **Validation:**
+- Inputs are validated to ensure:
+  - **Users/Admins**: Unique `userId`/`adminId` and valid passwords.
+  - **Assignments**: Correctly formatted `task` and valid `adminId` when uploading.
+  - **Error Handling**: Proper error messages are returned for invalid input or failed operations.
+
+---
+
+### **Workflow Example:**
+
+1. **User Registration**:  
+   - User provides a unique `userId` and password.
+   - On successful registration, the user can log in.
+
+2. **User Uploads Assignment**:  
+   - Once logged in, the user can submit an assignment by specifying their `task` and selecting an `admin`.
+   - The assignment is saved in the database, tagged to the specified admin.
+
+3. **Admin Views Assignments**:  
+   - Admin logs in and can see all assignments tagged to them.
+   - Admin reviews the task details, including the timestamp and user information.
+
+4. **Admin Accepts/Rejects Assignment**:  
+   - Admin selects an assignment and chooses to either accept or reject it.
+   - The decision is saved in the database, and the user can view the status.
+
+---
+
+### **Error Handling:**
+- If a user or admin attempts to register with an existing `userId` or `adminId`, they receive an error message.
+- If an assignment is uploaded with an invalid `adminId`, the user is notified of the error.
+- Unauthorized access to protected routes will return a **401 Unauthorized** error.
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
